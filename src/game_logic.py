@@ -87,3 +87,56 @@ def colocar_ficha(col, board):
                 fichas_amarrillas = fichas_amarrillas - 1
                 actualizar_fichas_amarillas(fichas_amarrillas)
             break
+    buscar_ganador()
+
+def buscar_ganador():
+    dia = buscar_diagonal()
+    vert = buscar_vertical()
+    hor = buscar_horizontal()
+    
+    if dia != None:
+        print("Ganador diagonal:", dia)
+    elif vert != None:
+        print("Ganador vertical:", vert)
+    elif hor != None:
+        print("Ganador horizontal:", hor)
+    
+def buscar_vertical():
+    for col in range(n_columnas):
+        rojo = 0
+        amarillo = 0
+
+        for row in range(n_filas):
+            if tablero_de_juego[row][col] == 1:
+                rojo += 1
+                amarillo = 0
+            elif tablero_de_juego[row][col] == 2:
+                amarillo += 1
+                rojo = 0
+
+            if rojo == 4:
+                return 1
+            elif amarillo == 4:
+                return 2
+    return None
+
+def buscar_horizontal():
+    for row in range(n_filas):
+        for col in range(n_columnas - 3):
+            if tablero_de_juego[row][col] == tablero_de_juego[row][col+1] == tablero_de_juego[row][col+2] == tablero_de_juego[row][col+3] != 0:
+                return tablero_de_juego[row][col]
+    return None
+
+def buscar_diagonal():
+    # Check for diagonals with positive slope
+    for row in range(n_filas - 3):
+        for col in range(n_columnas - 3):
+            if tablero_de_juego[row][col] == tablero_de_juego[row+1][col+1] == tablero_de_juego[row+2][col+2] == tablero_de_juego[row+3][col+3] != 0:
+                return tablero_de_juego[row][col]
+
+    # Check for diagonals with negative slope
+    for row in range(3, n_filas):
+        for col in range(n_columnas - 3):
+            if tablero_de_juego[row][col] == tablero_de_juego[row-1][col+1] == tablero_de_juego[row-2][col+2] == tablero_de_juego[row-3][col+3] != 0:
+                return tablero_de_juego[row][col]
+    return None
